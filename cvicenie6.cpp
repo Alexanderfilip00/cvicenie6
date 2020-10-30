@@ -13,7 +13,7 @@ private:
     int Floors;
     int AreaHouse;
     int AreaGarden;
-public:
+protected:
     FamilyHouse() {}; //  { std::cout << "Prazdny kostruktor objektu typu FamilyHouse.\n"; };
     ~FamilyHouse() {}; //  { std::cout << "Destruktor objektu typu FamilyHouse.\n"; };
     void Print();
@@ -29,7 +29,7 @@ private:
     int Number;
     int Floors;
     int Ap;
-public:
+protected:
     ApartmentHouse() {}; //  { std::cout << "Prazdny kostruktor objektu typu ApartmentHouse.\n"; };
     ~ApartmentHouse() {}; //  { std::cout << "Destruktor objektu typu ApartmentHouse.\n"; };
     void Print();
@@ -47,7 +47,7 @@ private:
     int Employees;
     int Sales;
     int Sections;
-public:
+protected:
     BusinessBuilding() {}; // { std::cout << "Prazdny kostruktor objektu typu BusinessBuilding.\n"; };
     ~BusinessBuilding() {}; //  { std::cout << "Destruktor objektu typu BusinessBuilding.\n"; };
     void Print();
@@ -67,7 +67,7 @@ private:
     int Employees;
     int Sales;
     int Area;
-public:
+protected:
     Factory() {}; //{ std::cout << "Prazdny kostruktor objektu typu Factory.\n"; };
     ~Factory() {}; // { std::cout << "Destruktor objektu typu Factory.\n"; };
     void Print();  
@@ -81,7 +81,7 @@ public:
 
 };
 
-class Street : private FamilyHouse, private ApartmentHouse, private BusinessBuilding, private Factory {
+class Street : public FamilyHouse, public ApartmentHouse, public BusinessBuilding, public Factory {
 private:
     FamilyHouse* FamHouses;
     ApartmentHouse* AparHouses;

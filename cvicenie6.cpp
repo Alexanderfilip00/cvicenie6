@@ -8,62 +8,77 @@
 
 
 class FamilyHouse{
-protected:
+private:
     int Number;
     int Floors;
-    float AreaHouse;
-    float AreaGarden;
+    int AreaHouse;
+    int AreaGarden;
 public:
-    FamilyHouse() { std::cout << "Prazdny kostruktor objektu typu FamilyHouse.\n"; };
-    FamilyHouse(int N, int F, float AH, float AG);
-    //FamilyHouse(int N, int F, float AH, float AG, std::string NS, std::string NC);
-    ~FamilyHouse() { std::cout << "Destruktor objektu typu FamilyHouse.\n"; };
+    FamilyHouse() {}; //  { std::cout << "Prazdny kostruktor objektu typu FamilyHouse.\n"; };
+    ~FamilyHouse() {}; //  { std::cout << "Destruktor objektu typu FamilyHouse.\n"; };
     void Print();
     
     void SetNumber(int n) { Number = n; };
+    void SetFloors(int f) { Floors = f; };
+    void SetAreaHouse(int ah) { AreaHouse = ah; };
+    void SetAreaGarden(int ag) { AreaGarden = ag; };
 };
 
 class ApartmentHouse{
-protected:
+private:
     int Number;
     int Floors;
     int Ap;
 public:
-    ApartmentHouse() { std::cout << "Prazdny kostruktor objektu typu ApartmentHouse.\n"; };
-    ApartmentHouse(int N, int F, int A);
-    //ApartmentHouse(int N, int F, int A, std::string NS, std::string NC);
-    ~ApartmentHouse() { std::cout << "Destruktor objektu typu ApartmentHouse.\n"; };
+    ApartmentHouse() {}; //  { std::cout << "Prazdny kostruktor objektu typu ApartmentHouse.\n"; };
+    ~ApartmentHouse() {}; //  { std::cout << "Destruktor objektu typu ApartmentHouse.\n"; };
     void Print();
+
+    void SetNumber(int n) { Number = n; };
+    void SetFloors(int f) { Floors = f; };
+    int GetFloors() { return Floors; };
+    void SetAp(int a) { Ap = a; };
 };
 
 class BusinessBuilding{
-protected:
+private:
     int Number;
     int Floors;
     int Employees;
-    float Sales;
+    int Sales;
     int Sections;
 public:
-    BusinessBuilding() { std::cout << "Prazdny kostruktor objektu typu BusinessBuilding.\n"; };
-    BusinessBuilding(int N, int F, int E, float Sa, int Se);
-    //BusinessBuilding(int N, int F, int E, float Sa, int Se, std::string NS, std::string NC);
-    ~BusinessBuilding() { std::cout << "Destruktor objektu typu BusinessBuilding.\n"; };
+    BusinessBuilding() {}; // { std::cout << "Prazdny kostruktor objektu typu BusinessBuilding.\n"; };
+    ~BusinessBuilding() {}; //  { std::cout << "Destruktor objektu typu BusinessBuilding.\n"; };
     void Print();
+
+    void SetNumber(int n) { Number = n; };
+    void SetFloors(int f) { Floors = f; };
+    void SetEmployees(int e) { Employees = e; };
+    int GetEmployees() { return Employees; };
+    void SetSales(int sa) { Sales = sa; };
+    void SetSections(int se) { Sections = se; };
 };
 
 class Factory{
-protected:
+private:
     int Number;
     int Floors;
     int Employees;
-    float Sales;
-    float Area;
+    int Sales;
+    int Area;
 public:
-    Factory() { std::cout << "Prazdny kostruktor objektu typu Factory.\n"; };
-    Factory(int N, int F, int E, float Sa, float A);
-    //Factory(int N, int F, int E, float Sa, float A, std::string NS, std::string NC);
-    ~Factory() { std::cout << "Destruktor objektu typu Factory.\n"; };
-    void Print();   
+    Factory() {}; //{ std::cout << "Prazdny kostruktor objektu typu Factory.\n"; };
+    ~Factory() {}; // { std::cout << "Destruktor objektu typu Factory.\n"; };
+    void Print();  
+
+    void SetNumber(int n) { Number = n; };
+    void SetFloors(int f) { Floors = f; };
+    void SetEmployees(int e) { Employees = e; };
+    int GetEmployees() { return Employees; };
+    void SetSales(int sa) { Sales = sa; };
+    void SetArea(int a) { Area = a; };
+
 };
 
 class Street : private FamilyHouse, private ApartmentHouse, private BusinessBuilding, private Factory {
@@ -74,20 +89,28 @@ private:
     Factory* Facts;
 
     int NFamHouses;
-
-protected:
+    int NAparHouses;
+    int NBusiBuilds;
+    int NFacts;
     std::string NameStreet;
     std::string NameCity;
 
+    void GenerateFH();
+    void PrintFH();
+    void GenerateAH();
+    void PrintAH();
+    void GenerateBB();
+    void PrintBB();
+    void GenerateFA();
+    void PrintFA();
+
 public:
-    Street() { std::cout << "Prazdny konstruktor objektu typu Street.\n"; };
-    Street(std::string S, std::string C);
-    ~Street() { std::cout << "Destruktor objektu typu Street.\n"; };
-    void Generate_FH();
-    void Print_FH();
-    //void Generate_AH() { NAparHouses = rand() % 26; };
-    //void Generate_BB() { NBusiBuilds = rand() % 15; };
-    //void Generate_FA() { NFacts = rand() % 5; };
+    Street(std::string S, std::string C) { NameStreet = S; NameCity = C; };
+    ~Street();
+    void GenerateStreet();
+    void PrintStreet();
+    
+
 };
 
 //######################################################################################################
@@ -96,31 +119,124 @@ int main()
 {
     srand((unsigned)time(0));
     Street kosicka("Kosicka", "Bratislava");
-    kosicka.Generate_FH();
-    kosicka.Print_FH();
+    kosicka.GenerateStreet();
+    kosicka.PrintStreet();
+
     return 0;
 }
 
 //######################################################################################################
 
-Street::Street(std::string S, std::string C)
+
+Street::~Street()
 {
-    NameStreet = S;
-    NameCity = C;
-    std::cout << "Vytvara sa objekt typu Street.\n";
+    delete[] FamHouses;
+    delete[] AparHouses;
+    delete[] BusiBuilds;
+    delete[] Facts;
+    //std::cout << "Destruktor objektu typu STREET. \n";
 }
 
-void Street::Generate_FH()
+void Street::GenerateStreet()
+{
+    GenerateFH();
+    GenerateAH();
+    GenerateBB();
+    GenerateFA();
+}
+
+void Street::PrintStreet()
+{
+    std::cout << "Ulica " << NameStreet << " v meste " << NameCity << ": \n";
+    std::cout << std::endl;
+    PrintFH();
+    std::cout << std::endl;
+    PrintAH();
+    std::cout << std::endl;
+    PrintBB();
+    std::cout << std::endl;
+    PrintFA();
+}
+
+
+void Street::GenerateAH()
+{
+    int i;
+    NAparHouses = rand() % 20 + 1;
+    AparHouses = new ApartmentHouse[NAparHouses];
+    for (i = 0; i < NAparHouses; i++) {
+        AparHouses[i].SetNumber(i + 200);
+        AparHouses[i].SetFloors(rand() % 7 + 5);
+        AparHouses[i].SetAp( AparHouses[i].GetFloors() * (rand() % 4 + 2) );        //vygeneruje pocet bytov na jednom poschodi a vynasobi ho poctom poschodi
+    }
+}
+
+void Street::PrintAH()
+{
+    int i;
+    for (i = 0; i < NAparHouses; i++) {
+        AparHouses[i].Print();
+    }
+}
+
+void Street::GenerateBB()
+{
+    int i;
+    NBusiBuilds = rand() % 10 + 1;
+    BusiBuilds = new BusinessBuilding[NBusiBuilds];
+    for (i = 0; i < NBusiBuilds; i++) {
+        BusiBuilds[i].SetNumber(i + 300);
+        BusiBuilds[i].SetFloors(rand() % 10 + 11);
+        BusiBuilds[i].SetEmployees(rand() % 60 + 1);
+        BusiBuilds[i].SetSales(BusiBuilds[i].GetEmployees() * (rand() % 100 + 10) );     //vygeneruje obrat za 1 zamestnanca a vynasobi poctom zamestnancov
+        BusiBuilds[i].SetSections(rand() % 10 + 1);
+    }
+}
+
+void Street::PrintBB()
+{
+    int i;
+    for (i = 0; i < NBusiBuilds; i++) {
+        BusiBuilds[i].Print();
+    }
+}
+
+void Street::GenerateFA()
+{
+    int i;
+    NFacts = rand() % 5 + 1;
+    Facts = new Factory[NFacts];
+    for (i = 0; i < NFacts; i++) {
+        Facts[i].SetNumber(i + 400);
+        Facts[i].SetFloors(rand() % 2 + 1);
+        Facts[i].SetEmployees(rand() % 300 + 1);
+        Facts[i].SetSales(Facts[i].GetEmployees() * (rand() % 50 + 10));     //vygeneruje obrat za 1 zamestnanca a vynasobi poctom zamestnancov
+        Facts[i].SetArea(rand() % 2000 + 200);
+    }
+}
+
+void Street::PrintFA()
+{
+    int i;
+    for (i = 0; i < NFacts; i++) {
+        Facts[i].Print();
+    }
+}
+
+void Street::GenerateFH()
 {
    int i;
-   NFamHouses = rand() % 50;
+   NFamHouses = rand() % 50 + 1;
    FamHouses = new FamilyHouse[NFamHouses];
    for (i = 0; i < NFamHouses; i++) {
        FamHouses[i].SetNumber(i + 100);
+       FamHouses[i].SetFloors(rand() % 3 + 1);
+       FamHouses[i].SetAreaHouse(rand() % 150 + 50);
+       FamHouses[i].SetAreaGarden(rand() % 300 + 20);
    }
 }
 
-void Street::Print_FH()
+void Street::PrintFH()
 {
     int i;
     for (i = 0; i < NFamHouses; i++) {
@@ -128,27 +244,9 @@ void Street::Print_FH()
     }
 }
 
-
-FamilyHouse::FamilyHouse(int N, int F, float AH, float AG)
-{
-    Number = N;
-    Floors = F;
-    AreaHouse = AH;
-    AreaGarden = AG;
-    std::cout << "Konstruktor objektu typu FamilyHouse.\n";
-}
-
 void FamilyHouse::Print()
 {
     std::cout << "Rodinny dom cislo " << Number << " s " << Floors << " poschodiami, rozholou domu " << AreaHouse << "m^2 a rozlohou zahrady " << AreaGarden << "m^2. \n";
-}
-
-ApartmentHouse::ApartmentHouse(int N, int F, int A)
-{
-    Number = N;
-    Floors = F;
-    Ap = A;
-    std::cout << "Konstruktor objektu typu ApartmentHouse.\n";
 }
 
 void ApartmentHouse::Print()
@@ -156,29 +254,9 @@ void ApartmentHouse::Print()
     std::cout << "Bytovy dom cislo " << Number << " s " << Floors << " poschodiami a " << Ap << " bytmi. \n";
 }
 
-BusinessBuilding::BusinessBuilding(int N, int F, int E, float Sa, int Se)
-{
-    Number = N;
-    Floors = F;
-    Employees = E;
-    Sales = Sa;
-    Sections = Se;
-    std::cout << "Konstruktor objektu typu BusinessBuilding.\n";
-}
-
 void BusinessBuilding::Print()
 {
     std::cout << "Kancelarska budova cislo " << Number << " s " << Floors << " poschodiami, " << Employees << " zamestnancami, priemernym dennym obratom " << Sales << " Eur a " << Sections << " oddeleniami. \n";
-}
-
-Factory::Factory(int N, int F, int E, float Sa, float A)
-{
-    Number = N;
-    Floors = F;
-    Employees = E;
-    Sales = Sa;
-    Area = A;
-    std::cout << "Konstruktor objektu typu Factory.\n";
 }
 
 void Factory::Print()
